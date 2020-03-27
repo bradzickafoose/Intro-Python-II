@@ -1,4 +1,6 @@
 from room import Room
+from player import Player
+from item import Item
 
 # Declare all the rooms
 
@@ -49,3 +51,47 @@ room['treasure'].s_to = room['narrow']
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
+
+
+def moves(self, move):
+    if move == 'n':
+        return self.current_room.n_to
+    elif move == 's':
+        return self.current_room.s_to
+    elif move == 'e':
+        return self.current_room.e_to
+    else:
+        return self.current_room.w_to
+
+
+def main():
+    player = Player(input("\nEnter your adventurer name: "), room['outside'])
+    print('\n**************************************\n')
+    print(f"** Welcome to Adventure Land, {player.name}! **")
+    print('\n**************************************')
+    while True:
+        print(f"\nYou are currently in the {player.current_room.name}.")
+        print(f'{player.current_room.description}')
+        print(
+            '\nWhere would you like to go? [n] North [s] South [e] East [w] West or [q] Quit')
+        cmd = input('-> ')
+        if cmd == 'q':
+            print('\nThank you for visiting Adventure Land\n')
+            break
+        elif cmd == 'n' or cmd == 's' or cmd == 'e' or cmd == 'w':
+            if moves(player, cmd) is None:
+                print('\n*************************************************')
+                print(f'\nYou can\'t go that way, {player.name}!')
+                print('Try a different direction.')
+                print('\n*************************************************')
+                continue
+            else:
+                player.current_room = moves(player, cmd)
+        else:
+            print(
+                'Please enter a valid direction: [n] North [s] South [e] East [w] West or [q] Quit')
+            continue
+
+
+if __name__ == '__main__':
+    main()
